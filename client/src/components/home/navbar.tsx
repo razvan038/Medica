@@ -1,5 +1,6 @@
 import { Menu } from "lucide-react";
 import { Link as LucideLink } from "lucide-react";
+import { ShoppingBag } from "lucide-react"
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
@@ -31,10 +32,10 @@ import {
 
 const subMenuItemsOne = [
   {
-    title: "Link",
-    description: "This is just a normal link.",
+    title: "Categorie",
+    description: "Descrierea categoriei",
     icon: <LucideLink className="size-5 shrink-0" />,
-  },
+  }, 
 ];
 
 const Navbar = () => {
@@ -55,15 +56,27 @@ const Navbar = () => {
                     variant: "ghost",
                   })
                 )}
-                href="#"
+                href="/about"
               >
-                Link
+                About us
+              </Link>
+              <Link
+                className={cn(
+                  "text-muted-foreground",
+                  navigationMenuTriggerStyle,
+                  buttonVariants({
+                    variant: "ghost",
+                  })
+                )}
+                href="/contact"
+              >
+                Contact
               </Link>
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem className="text-muted-foreground">
                     <NavigationMenuTrigger>
-                      <span>Dropdown</span>
+                      <span>Shop</span>
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="w-64 p-3">
@@ -97,8 +110,20 @@ const Navbar = () => {
             </div>
           </div>
           <div className="flex gap-3">
+          <Link
+                className={cn(
+                  "text-muted-foreground size-2",
+                  navigationMenuTriggerStyle,
+                  buttonVariants({
+                    variant: "ghost",
+                  })
+                )}
+                href="#"
+              >
+                <ShoppingBag />
+              </Link>
             <ThemeToggle />
-            <Button>Button</Button>
+            <Button>Login</Button>
           </div>
         </nav>
         <div className="block lg:hidden">
@@ -129,7 +154,7 @@ const Navbar = () => {
                     <Accordion type="single" collapsible className="w-full">
                       <AccordionItem value="products" className="border-b-0">
                         <AccordionTrigger className="py-0 mb-4 font-semibold hover:no-underline">
-                          Dropdown
+                          Shop
                         </AccordionTrigger>
                         <AccordionContent className="mt-2">
                           {subMenuItemsOne.map((item, idx) => (

@@ -2,7 +2,7 @@ import React from 'react'
 
 function page() {
   return (
-    <div></div>
+    <div>Your cart is empty.</div>
   )
 }
 

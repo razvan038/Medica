@@ -1,10 +1,10 @@
 import { Menu } from "lucide-react";
-import { Link as LucideLink } from "lucide-react";
+import { Tablets } from "lucide-react";
 import { ShoppingBag } from "lucide-react"
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
-import { ThemeToggle } from "@/components/home/theme-toggle";
+
 
 import {
   Accordion,
@@ -32,9 +32,34 @@ import {
 
 const subMenuItemsOne = [
   {
-    title: "Categorie",
-    description: "Descrierea categoriei",
-    icon: <LucideLink className="size-5 shrink-0" />,
+    title: "Analgezice",
+    description: "Ameliorează durerea, precum paracetamolul sau ibuprofenul.",
+    icon: <Tablets className="size-6 shrink-0" />,
+  }, 
+  {
+    title: "Antibiotice",
+    description: "Combat infecțiile bacteriene, cum ar fi penicilina.",
+    icon: <Tablets className="size-6 shrink-0" />,
+  }, 
+  {
+    title: "Antiinflamatoare",
+    description: "Reduc inflamațiile și durerea, de exemplu, ibuprofen.",
+    icon: <Tablets className="size-6 shrink-0" />,
+  }, 
+  {
+    title: "Vitamine",
+    description: "Suplimente pentru carențe de vitamine esențiale.",
+    icon: <Tablets className="size-6 shrink-0" />,
+  }, 
+  {
+    title: "Digestive",
+    description: "Ajută la îmbunătățirea digestiei și alină disconfortul gastric.",
+    icon: <Tablets className="size-6 shrink-0" />,
+  }, 
+  {
+    title: "Antitusive",
+    description: "Calmante pentru tuse, reduc frecvența tusei.",
+    icon: <Tablets className="size-6 shrink-0" />,
   }, 
 ];
 
@@ -45,7 +70,9 @@ const Navbar = () => {
         <nav className="justify-between hidden lg:flex">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <span className="text-xl font-bold sm:mb-1">Medica</span>
+              <Link href="/">
+                <span className="flex text-xl font-bold sm:mb-1 hover:text-neutral-700">Medica</span>
+              </Link>
             </div>
             <div className="flex items-center">
               <Link
@@ -85,7 +112,7 @@ const Navbar = () => {
                             <NavigationMenuLink asChild>
                               <Link
                                 className={cn(
-                                  "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                  "flex select-none gap-2 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground hover:bg-stone-100"
                                 )}
                                 href="#"
                               >
@@ -94,7 +121,7 @@ const Navbar = () => {
                                   <div className="text-sm font-semibold">
                                     {item.title}
                                   </div>
-                                  <p className="text-sm leading-snug text-muted-foreground">
+                                  <p className="text-xs leading-snug text-muted-foreground">
                                     {item.description}
                                   </p>
                                 </div>
@@ -118,12 +145,14 @@ const Navbar = () => {
                     variant: "ghost",
                   })
                 )}
-                href="#"
+                href="/cart"
               >
                 <ShoppingBag />
               </Link>
-            <ThemeToggle />
-            <Button>Login</Button>
+            
+              <Button asChild>
+                <Link href="/auth/login">Log in</Link>
+              </Button>
           </div>
         </nav>
         <div className="block lg:hidden">
@@ -132,7 +161,7 @@ const Navbar = () => {
               <span className="text-xl font-bold">Medica</span>
             </div>
             <div className="flex items-center gap-2">
-              <ThemeToggle />
+              
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon">

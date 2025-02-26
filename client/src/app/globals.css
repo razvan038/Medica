@@ -51,4 +51,13 @@
 
 body {
   font-family: var(--font-dm-sans), sans-serif;
+  transition-property:opacity, transform, filter;
+  transition-timing-function: ease-in-out;
+  transition-duration: 500ms;
+}
+
+.page-transition{
+  opacity: 0;
+  transform: translateY(40px);
+  filter: blur(16px);
 }

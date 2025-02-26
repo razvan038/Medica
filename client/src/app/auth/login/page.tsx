@@ -14,6 +14,8 @@ import {
   Button
 } from "@/components/ui/button";
 import { EyeClosed, Eye } from 'lucide-react';
+import {TransitionLink} from '@/components/home/TransitionLink'
+import { cn } from '@/lib/utils';
 
 function Page() {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -56,7 +58,7 @@ function Page() {
         <CardFooter className="flex justify-between">
           <Button variant="outline">Cancel</Button>
           <div className='flex flex-row space-x-2 items-center'>
-            <a className='text-xs underline hover:text-neutral-700' href="/auth/signup">Don't have an account?</a>
+            <TransitionLink className={cn("text-underline text-s")} href="/auth/signup">Don't have an account?</TransitionLink>
             <Button>Login</Button>
           </div>
         </CardFooter>

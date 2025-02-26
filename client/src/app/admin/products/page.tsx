@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import * as XLSX from "xlsx";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "@/components/ui/button"; 
 
 export default function UploadExcel() {
   const [products, setProducts] = useState<any[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null); // Declare fileInputRef variable
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -34,12 +35,18 @@ export default function UploadExcel() {
 
   return (
     <div className="p-4 border rounded-lg shadow-md max-w-4xl mx-auto">
+      <div>
       <input
         type="file"
         accept=".xlsx, .xls"
         onChange={handleFileUpload}
-        className="mb-4 border p-2 rounded w-full"
+        ref={fileInputRef}
+        className="hidden"
       />
+      <Button onClick={() => fileInputRef.current?.click()}>
+        Selectează fișier
+      </Button>
+    </div>
        {products.length > 0 && (
           <Button 
             onClick={handleUpload} 

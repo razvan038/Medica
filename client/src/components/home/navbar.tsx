@@ -2,7 +2,8 @@ import { Menu } from "lucide-react";
 import { Tablets } from "lucide-react";
 import { ShoppingBag } from "lucide-react"
 import Link from "next/link";
-
+import {TransitionLink} from '@/components/home/TransitionLink'
+import { ShieldPlus } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 
@@ -70,12 +71,12 @@ const Navbar = () => {
         <nav className="justify-between hidden lg:flex">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <Link href="/">
+              <TransitionLink className="" href="/">
                 <span className="flex text-xl font-bold sm:mb-1 hover:text-neutral-700">Medica</span>
-              </Link>
+              </TransitionLink>
             </div>
             <div className="flex items-center">
-              <Link
+              <TransitionLink
                 className={cn(
                   "text-muted-foreground",
                   navigationMenuTriggerStyle,
@@ -86,8 +87,8 @@ const Navbar = () => {
                 href="/about"
               >
                 About us
-              </Link>
-              <Link
+              </TransitionLink>
+              <TransitionLink
                 className={cn(
                   "text-muted-foreground",
                   navigationMenuTriggerStyle,
@@ -98,7 +99,7 @@ const Navbar = () => {
                 href="/contact"
               >
                 Contact
-              </Link>
+              </TransitionLink>
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem className="text-muted-foreground">
@@ -137,7 +138,20 @@ const Navbar = () => {
             </div>
           </div>
           <div className="flex gap-3">
-          <Link
+          <TransitionLink
+                className={cn(
+                  "text-muted-foreground size-2",
+                  navigationMenuTriggerStyle,
+                  buttonVariants({
+                    variant: "ghost",
+                  })
+                )}
+                href="/admin"
+              >
+                <ShieldPlus />
+              </TransitionLink>
+            
+          <TransitionLink
                 className={cn(
                   "text-muted-foreground size-2",
                   navigationMenuTriggerStyle,
@@ -148,10 +162,10 @@ const Navbar = () => {
                 href="/cart"
               >
                 <ShoppingBag />
-              </Link>
+              </TransitionLink>
             
               <Button asChild>
-                <Link href="/auth/login">Log in</Link>
+                <TransitionLink className="" href="/auth/login">Log in</TransitionLink>
               </Button>
           </div>
         </nav>

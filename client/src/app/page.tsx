@@ -8,6 +8,8 @@ import { GradientHeading } from "@/components/ui/gradient-heading";
 import { LogoCarousel } from "@/components/ui/logo-carousel";
 import { Feature } from "@/components/ui/feature"
 import { SVGProps } from "react";
+import {Testimonials} from '@/components/home/testimonials'
+import { FeaturesSectionWithHoverEffects } from "@/components/blocks/feature-section-with-hover-effects";
 
 function AppleIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -277,14 +279,9 @@ export default function Home() {
       <div className="mx-10 flex flex-col justify-center items-center flex-grow">
         <Welcome />
         <Button asChild>
-          <Link className="mb-[10vh]" href="/products">Vezi produse</Link>
+          <Link className="mb-[10vh]" href="/products">See products</Link>
         </Button>
-        
-        <div>
-          <h1 className="font-bold mb-[10vh] text-3xl">Recomandarile noastre</h1>
-        </div>
-        
-        <h1 className="font-bold text-3xl">Partenerii nostri</h1>
+        <h1 className="font-bold text-3xl">Our partners</h1>
         <div>
         <LogoCarousel columnCount={4} logos={allLogos} />
         </div>
@@ -301,6 +298,13 @@ export default function Home() {
           </div>
         ))}
       </div>
+    </div>
+    
+    <Testimonials />
+    <div>
+    <h1 className="text-3xl font-normal text-left">Delivery & Safety
+    </h1>
+    < FeaturesSectionWithHoverEffects />
     </div>
       </div>
     </section>

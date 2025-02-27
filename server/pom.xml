@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>com.medica</groupId>
+  <artifactId>server</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  
+  <name>medica-backend</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <java.version>21</java.version> <!-- Java 21 -->
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <!-- Spring Boot Starter Web (pentru aplicații web) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <version>3.1.0</version> <!-- Actualizat la Spring Boot 3.1.0 -->
+    </dependency>
+
+    <!-- Dependență Logback pentru logging -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-logging</artifactId>
+        <version>3.1.0</version> <!-- Versiunea corectă pentru Spring Boot 3.1.0 -->
+    </dependency>
+
+    <!-- Testare cu JUnit 5 -->
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.8.2</version> <!-- Folosește JUnit 5 -->
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.8.2</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Spring Boot Starter Test (pentru teste de integrare și unitare) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <version>3.1.0</version> <!-- Actualizat la Spring Boot 3.1.0 -->
+        <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.1.0</version> <!-- Actualizat la Spring Boot 3.1.0 -->
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

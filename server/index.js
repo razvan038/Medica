@@ -1,0 +1,10 @@
+const webServerService = require('./controllers/services/web-server.service');
+const init = async () => {
+    try{
+    await webServerService.startWebServer();
+    console.log('Web server started successfully');
+    } catch (e) {
+        console.error('Error starting web server:', e);
+    }
+}
+init();

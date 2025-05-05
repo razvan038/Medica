@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../path/to/your/sequelize-instance');
+const sequelize = require('../auth/sequelize');
 
 const User = sequelize.define('User', {
     username: {
@@ -15,6 +15,14 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
+    },
+    otp: {
+        type: DataTypes.INTEGER, // sau STRING dacă vrei mai multă flexibilitate
+        allowNull: true,
+    },
+    otpVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
     createdAt: {
         type: DataTypes.DATE,

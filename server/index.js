@@ -1,4 +1,5 @@
 const webServerService = require('./controllers/services/web-server.service');
+const routes = require('./controllers/routes/routes');
 const init = async () => {
     try{
     await webServerService.startWebServer();

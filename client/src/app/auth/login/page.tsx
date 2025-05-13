@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,9 +9,7 @@ import { Button } from "@/components/ui/button";
 import { EyeClosed, Eye } from "lucide-react";
 import { TransitionLink } from "@/components/home/TransitionLink";
 import { cn } from "@/lib/utils";
-import { login } from "../../../../services/authService";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp"; // Importă componenta OTP
+import { loginUser } from "../../../../services/login.service"; 
 
 function Page() {
   const [email, setEmail] = useState("");
@@ -18,7 +17,7 @@ function Page() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showOTPDialog, setShowOTPDialog] = useState(false); // Controlăm deschiderea dialogului OTP
+  const router = useRouter();
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
@@ -28,9 +27,11 @@ function Page() {
     setError("");
 
     try {
-      const data = await login(email, password); // Trimite cererea de login
-      // După login, deschidem dialogul OTP
-      setShowOTPDialog(true);
+      const data = await loginUser(email, password);
+      
+      console.log("Login successful", data);
+      
+      router.push("/");
     } catch (err) {
       setError("Login failed. Please check your credentials.");
     } finally {
@@ -80,51 +81,17 @@ function Page() {
             </div>
           </div>
 
-          {error && <div className="text-red-500 text-sm mt-2">{error}</div>} {/* Afișează mesajul de eroare */}
+          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+          
+          <Button type="submit" disabled={isLoading} className="w-full mt-4">
+            {isLoading ? "Logging in..." : "Login"}
+          </Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline" onClick={() => window.location.href = "/"}>Cancel</Button>
-        <div className="flex flex-row space-x-2 items-center">
-          <TransitionLink className={cn("text-underline text-s")} href="/auth/signup">Don't have an account?</TransitionLink>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Login"}
-          </Button>
-        </div>
+        <TransitionLink className={cn("text-underline text-s")} href="/auth/signup">Don't have an account?</TransitionLink>
       </CardFooter>
-
-      {/* Dialogul OTP */}
-      <Dialog open={showOTPDialog} onOpenChange={(open) => setShowOTPDialog(open)}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>OTP Verification</DialogTitle>
-            <DialogDescription>Enter the OTP sent to your email</DialogDescription>
-          </DialogHeader>
-
-          <div className="mt-4">
-            <InputOTP maxLength={6}>
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowOTPDialog(false)}>
-              Cancel
-            </Button>
-            <Button>Submit OTP</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </Card>
   );
 }

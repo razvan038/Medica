@@ -1,8 +1,14 @@
+
 const { DataTypes } = require('sequelize');
-const sequelize = require('../auth/sequelize');
+const sequelize = require('../auth/sequelize'); // ajustează dacă ai alt path către configul DB
 
 const User = sequelize.define('User', {
     username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
@@ -11,23 +17,26 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+    confirmPassword: {
+        type: DataTypes.VIRTUAL, // nu se salvează în DB, doar pt validare
+        set(value) {
+            if (value !== this.password) {
+                throw new Error("Parolele nu se potrivesc.");
+            }
+            this.setDataValue('confirmPassword', value);
+        }
     },
     otp: {
-        type: DataTypes.INTEGER, // sau STRING dacă vrei mai multă flexibilitate
-        allowNull: true,
+        type: DataTypes.INTEGER,
+        allowNull: true
     },
     otpVerified: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        defaultValue: false
     },
-    createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-    }
+}, {
+    tableName: 'users', // sau cum ai tu definit în DB
+    timestamps: true
 });
 
 module.exports = User;

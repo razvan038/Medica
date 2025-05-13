@@ -1,6 +1,6 @@
 // client/src/services/productService.js
 
-const API_URL = "http://localhost:8080/api";  // URL-ul backend-ului tău
+const API_URL = "http://localhost:1000/api";  // URL-ul backend-ului tău
 
 // Funcție pentru obținerea listei de produse
 export const getProducts = async () => {

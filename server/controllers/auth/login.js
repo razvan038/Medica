@@ -1,46 +1,75 @@
-const mysql = require("mysql2/promise");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const User = require('../models/User');
 
-// Conectare la DB
-
-const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-});
-
-// Login user
 const loginUser = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        // Verificarea existentei utilizatorului
-        const user = await User.findOne({ where: { username } });
+        // Căutăm utilizatorul în baza de date
+        const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            // User not found
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: 'Utilizatorul nu a fost găsit.' });
         }
 
-        // Compare passwords
+        // Verificăm parola
         const isPasswordValid = await bcrypt.compare(password, user.password);
-
         if (!isPasswordValid) {
-            // Invalid password
-            return res.status(401).json({ message: "Invalid password" });
+            return res.status(401).json({ message: 'Parolă incorectă.' });
         }
 
-        // Generate JWT token
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+        // Dacă OTP-ul nu este verificat, trimitem un nou OTP
+        if (!user.otpVerified) {
+            const otp = crypto.randomInt(100000, 999999);
+            user.otp = otp;
+            await user.save();
 
-        // Return the token
-        res.json({ token });
+            const transporter = nodemailer.createTransport({
+                host: "sandbox.smtp.mailtrap.io",
+                port: 2525,
+                auth: {
+                    user: "0e2014512b007e",
+                    pass: "270ee30283271a"
+                }
+            });
+
+            const mailOptions = {
+                from: 'noreply@medica.ro',
+                to: email,
+                subject: 'Reverificare OTP',
+                text: `Codul tău OTP pentru confirmarea contului este: ${otp}`,
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Eroare trimitere OTP:', error);
+                } else {
+                    console.log('OTP retrimis la email:', info.response);
+                }
+            });
+
+            return res.status(403).json({ message: 'Contul nu este verificat. Am retrimis OTP-ul pe email.' });
+        }
+
+        // Dacă OTP-ul este verificat, generăm JWT
+        const token = jwt.sign(
+            { userId: user.id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.json({
+            message: 'Autentificare reușită.',
+            token,
+        });
+
     } catch (error) {
-        // Handle the error here
         console.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: 'Eroare internă la autentificare.' });
     }
 };
+
+module.exports = { loginUser };

@@ -1,59 +1,65 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";  // Pentru redirecționare după succes
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
+import { registerUser } from "../../../../services/register.service";
+import {verifyOtp} from '../../../../services/otp.service'
 
 const SignupPage = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpError, setOtpError] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showOTPDialog, setShowOTPDialog] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       setError("Parolele nu se potrivesc.");
       return;
     }
 
     setLoading(true);
+    setError("");
+
     try {
-      const response = await fetch("/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-          confirmPassword,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Redirect to OTP page
-        router.push("/auth/verify-otp");
-      } else {
-        setError(data.message || "A apărut o eroare la înregistrare.");
-      }
-    } catch (error) {
-      setError("A apărut o eroare la conectarea cu serverul.");
+      await registerUser({ username, email, password, confirmPassword });
+      // Înregistrare reușită -> arătăm OTP dialog
+      setShowOTPDialog(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "A apărut o eroare necunoscută.");
     } finally {
       setLoading(false);
     }
   };
+
+  const handleOtpSubmit = async () => {
+    setOtpError(""); // resetăm eroarea
+    try {
+      await verifyOtp({ email, otp });
+      setShowOTPDialog(false);
+      router.push("/dashboard");
+    } catch (err) {
+      if (err instanceof Error) {
+        setOtpError(err.message);
+      } else {
+        setOtpError("OTP invalid sau eroare necunoscută.");
+      }
+    }
+  };
+  
 
   return (
     <Card className="max-w-xl mx-auto mt-10">
@@ -64,27 +70,15 @@ const SignupPage = () => {
       <CardContent>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="firstName">Prenume</Label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="lastName">Nume</Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  required
-                />
-              </div>
+            <div>
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
             </div>
             <div>
               <Label htmlFor="email">Email</Label>
@@ -125,6 +119,37 @@ const SignupPage = () => {
           </div>
         </form>
       </CardContent>
+
+      {/* Dialog OTP */}
+      <Dialog open={showOTPDialog} onOpenChange={setShowOTPDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Verificare OTP</DialogTitle>
+            <DialogDescription>Introdu codul primit pe email</DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-4">
+            <InputOTP maxLength={6} value={otp} onChange={setOtp}>
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+              </InputOTPGroup>
+              <InputOTPSeparator />
+              <InputOTPGroup>
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
+          {otpError && <div className="text-red-600 mt-2">{otpError}</div>}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowOTPDialog(false)}>Renunță</Button>
+            <Button onClick={handleOtpSubmit}>Trimite OTP</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };

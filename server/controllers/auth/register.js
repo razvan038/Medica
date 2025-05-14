@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const crypto = require('crypto'); // pentru generarea OTP-ului
 const nodemailer = require('nodemailer'); // pentru trimiterea OTP-ului pe email

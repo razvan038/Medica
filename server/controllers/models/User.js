@@ -26,6 +26,11 @@ const User = sequelize.define('User', {
             this.setDataValue('confirmPassword', value);
         }
     },
+    role_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 2 // presupunem că rolul utilizatorului este 2 (utilizator standard)
+    },
     otp: {
         type: DataTypes.INTEGER,
         allowNull: true

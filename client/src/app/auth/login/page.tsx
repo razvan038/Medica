@@ -91,6 +91,7 @@ function Page() {
       <CardFooter className="flex justify-between">
         <Button variant="outline" onClick={() => window.location.href = "/"}>Cancel</Button>
         <TransitionLink className={cn("text-underline text-s")} href="/auth/signup">Don't have an account?</TransitionLink>
+        <TransitionLink className={cn("text-underline text-s")} href="/auth/forgot">Forgot password?</TransitionLink>
       </CardFooter>
     </Card>
   );

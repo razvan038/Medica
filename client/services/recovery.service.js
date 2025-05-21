@@ -1,12 +1,11 @@
 export const sendRecoveryEmail = async (email) => {
     try {
-        await fetch("/api/reset-password", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-         Authorization: `Bearer ${token}` // token primit din URL
+       const response = await fetch("http://localhost:1000/recovery", {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json", 
     },
-    body: JSON.stringify({ password })
+    body: JSON.stringify({ email })
     });
 
 

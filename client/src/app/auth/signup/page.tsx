@@ -50,7 +50,7 @@ const SignupPage = () => {
     try {
       await verifyOtp({ email, otp });
       setShowOTPDialog(false);
-      router.push("/dashboard");
+      router.push("/");
     } catch (err) {
       if (err instanceof Error) {
         setOtpError(err.message);

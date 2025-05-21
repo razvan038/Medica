@@ -37,7 +37,7 @@ return (
         <CardContent>
             <form onSubmit={handleResetPassword}>
                 <div className="grid w-full items-center gap-4">
-                    <div className="flex flex-col space-y-1.5">
+                    <div className="flex flex-col space-y-1.5 mb-5">
                         <Label htmlFor="email">Email</Label>
                         <Input
                             id="email"
@@ -49,13 +49,11 @@ return (
                     </div>
                     {error && <p className="text-red-500">{error}</p>}
                 </div>
-            </form>
-        </CardContent>
-        <CardFooter>
             <Button type="submit" disabled={isLoading} className={cn(isLoading && "loading")}>
                 {isLoading ? "Sending..." : "Send Recovery Email"}
             </Button>
-        </CardFooter>
+            </form>
+        </CardContent>
     </Card>
 )
 }

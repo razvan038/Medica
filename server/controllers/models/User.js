@@ -39,6 +39,14 @@ const User = sequelize.define('User', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
+    resetToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      resetTokenExpires: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
 }, {
     tableName: 'users', // sau cum ai tu definit în DB
     timestamps: true

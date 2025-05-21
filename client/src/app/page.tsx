@@ -287,20 +287,6 @@ export default function Home() {
         <LogoCarousel columnCount={4} logos={allLogos} />
         </div>
         <Feature />
-        <div className="mb-[10vh] w-full mx-10">
-      <h1 className="text-3xl font-bold mb-4">Categorii de Produse</h1>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {categories.map((category, index) => (
-          <div
-            key={index}
-            className="border rounded-lg p-4 shadow-md bg-white text-center font-semibold"
-          >
-            {category}
-          </div>
-        ))}
-      </div>
-    </div>
-    
     <Testimonials />
     <div>
     <h1 className="text-3xl font-normal text-left">Delivery & Safety

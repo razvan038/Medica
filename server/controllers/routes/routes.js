@@ -6,6 +6,7 @@ const { logoutUser } = require('../auth/logout');
 const protectedRoutes = require('./protectedRoutes');
 const isAuthenticated = require('../middleware/isAuthenticated');
 const { recovery } = require('../auth/recovery');
+const { getAllUsers, deleteUser } = require('../users/userController') 
 const { resetPassword } = require('../auth/resetPassword'); // nou: fișier cu logica resetării
 
 // Test endpoint
@@ -21,9 +22,12 @@ router.post('/verify-otp', verifyOTP);
 router.delete('/logout', isAuthenticated, logoutUser);
 router.use('/api', protectedRoutes); 
 
+// Users endpoints
+router.get('/viewUsers', getAllUsers);
+router.delete('/deleteUser/:id', deleteUser);
 
 // Password recovery
-router.post('/recovery', recovery);             // trimite email cu token JWT
-router.post('/reset-password', resetPassword);  // resetează parola pe baza JWT-ului din header
+router.post('/recovery', recovery);             // trimite email de resetare
+router.post('/reset-password', resetPassword);  // resetează parola 
 
 module.exports = router;

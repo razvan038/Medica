@@ -10,6 +10,7 @@ import { Feature } from "@/components/ui/feature"
 import { SVGProps } from "react";
 import {Testimonials} from '@/components/home/testimonials'
 import { FeaturesSectionWithHoverEffects } from "@/components/blocks/feature-section-with-hover-effects";
+import {logoutUser } from '../../services/logout.service'
 
 function AppleIcon(props: SVGProps<SVGSVGElement>) {
   return (

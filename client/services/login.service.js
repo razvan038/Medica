@@ -26,6 +26,9 @@ export const loginUser = async (email, password) => {
         if(!response.ok){
             throw new Error(data.message || "Failed to login");
         }
+        if(data.token){
+            localStorage.setItem("token", data.token);
+        }
         return data;
 
     }catch(error) {

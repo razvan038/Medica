@@ -3,6 +3,8 @@ const { register } = require('../auth/register');
 const { verifyOTP } = require('../auth/otp');
 const { loginUser } = require('../auth/login'); 
 const { logoutUser } = require('../auth/logout');
+const protectedRoutes = require('./protectedRoutes');
+const isAuthenticated = require('../middleware/isAuthenticated');
 
 router.get('/api/hello', (req, res) => {
     console.log('Received GET on /api/hello');
@@ -15,6 +17,8 @@ router.get('/api/hello', (req, res) => {
 router.post('/register', register);
 router.post('/login', loginUser);
 router.post('/verify-otp', verifyOTP);
-router.delete('/logout', logoutUser);
+router.delete('/logout', isAuthenticated, logoutUser);
+router.use('/api', protectedRoutes); 
+
 
 module.exports = router;    

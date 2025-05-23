@@ -13,7 +13,7 @@ const verifyOTP = async (req, res) => {
         }
 
         // Verificăm dacă OTP-ul este corect
-        if (user.otp === parseInt(otp)) {
+        if (user.otp === otp.toString()) {
             // OTP corect, putem marca utilizatorul ca verificat sau orice altceva
             user.otpVerified = true;
             await user.save();

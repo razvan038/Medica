@@ -8,12 +8,20 @@ const isAuthenticated = require('../middleware/isAuthenticated');
 const { recovery } = require('../auth/recovery');
 const { getAllUsers, deleteUser } = require('../users/userController') 
 const { resetPassword } = require('../auth/resetPassword'); // nou: fișier cu logica resetării
+const { uploadProducts } = require('../products/upload-products');
+const { viewProducts } = require('../products/view-products');
+const { processPayment } = require('../products/process-payment');
+
 
 // Test endpoint
 router.get('/api/hello', (req, res) => {
     console.log('Received GET on /api/hello');
     res.status(200).json({ message: 'Hello world!' });
 });
+
+router.post('/process-payment', processPayment);
+router.post('/upload-products', uploadProducts);
+router.get('/view-products', viewProducts);
 
 // Auth endpoints
 router.post('/register', register);

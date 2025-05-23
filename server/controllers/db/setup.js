@@ -48,10 +48,26 @@ const setupDB = async () => {
 
         CREATE TABLE IF NOT EXISTS users (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(255) NOT NULL UNIQUE,
+            username VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             role_id INT,
-            FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL
+            otp VARCHAR(100),
+            otpVerified BOOLEAN DEFAULT FALSE,
+            resetToken VARCHAR(255),
+            resetTokenExpires DATETIME,
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE IF NOT EXISTS products (
+            id VARCHAR(36) PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            description TEXT,
+            category VARCHAR(100),
+            price DECIMAL(10, 2) NOT NULL,
+            discount DECIMAL(10, 2),
+            stock INT NOT NULL
         );
         `;
 

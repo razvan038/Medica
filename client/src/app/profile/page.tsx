@@ -1,49 +1,61 @@
+// app/profile/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 
+type User = {
+  email: string;
+  username?: string;
+};
+
 export default function ProfilePage() {
-  const [user, setUser] = useState<{ email: string  } | null>(null);
-  const [error, setError] = useState("");
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchUser = async () => {
       const token = localStorage.getItem("token");
-
       if (!token) {
-        setError("Token inexistent. Autentifică-te mai întâi.");
+        setLoading(false);
         return;
       }
 
       try {
-        const res = await fetch("http://localhost:1000/profile", {
+        const res = await fetch("http://localhost:1000/api/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        if (!res.ok) {
-          const data = await res.json();
-          throw new Error(data.message || "Eroare la obținerea profilului");
-        }
+        if (!res.ok) throw new Error("Unauthorized");
 
         const data = await res.json();
         setUser(data.user);
-      } catch (err) {
-        setError((err as Error).message);
+      } catch (error) {
+        console.error("Failed to fetch profile", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchProfile();
+    fetchUser();
   }, []);
 
-  if (error) return <div className="text-red-500">{error}</div>;
-  if (!user) return <div>Se încarcă profilul...</div>;
+  if (loading) return <div className="text-center mt-8">Se încarcă...</div>;
+  if (!user) return <div className="text-center mt-8">Nu ești autentificat.</div>;
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 border rounded shadow">
-      <h1 className="text-xl font-semibold mb-2">Profil utilizator</h1>
-      <p><strong>Email:</strong> {user.email}</p>
-    </div>
-  );
+  <div className="max-w-2xl mx-auto mt-10 p-6 border rounded shadow">
+    <h1 className="text-2xl font-bold mb-4">Profilul tău</h1>
+    {user ? (
+      <>
+        <p><strong>Email:</strong> {user.email}</p>
+        {user.username && <p><strong>Username:</strong> {user.username}</p>}
+      </>
+    ) : (
+      <p>Nu ești autentificat.</p>
+    )}
+  </div>
+);
+
 }

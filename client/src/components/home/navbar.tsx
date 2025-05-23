@@ -177,6 +177,12 @@ const Navbar = () => {
             {loading ? null : user ? (
               <>
                 <div className="text-sm text-green-600">Hello, {user.username || user.email}</div>
+                <TransitionLink
+                  className={cn("text-muted-foreground text-sm", navigationMenuTriggerStyle)}
+                  href="/profile"
+                >
+                  Profile
+                </TransitionLink>
                 <Button onClick={handleLogout} variant="outline" className="text-sm">
                   Logout
                 </Button>

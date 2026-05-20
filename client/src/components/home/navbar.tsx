@@ -5,6 +5,7 @@ import { Menu, Tablets, ShoppingBag, ShieldPlus } from "lucide-react";
 import Link from "next/link";
 import { TransitionLink } from "@/components/home/TransitionLink";
 import { cn } from "@/lib/utils";
+import { logoutUser } from "../../../services/logout.service";
 
 import {
   Accordion,
@@ -103,8 +104,16 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
+    const doLogout = async () => {
+      try {
+        await logoutUser();
+        setUser(null);
+      } catch (error) {
+        console.error("Logout eșuat:", error);
+      }
+    };
+
+    doLogout();
   };
 
   return (

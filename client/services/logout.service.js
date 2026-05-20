@@ -1,7 +1,7 @@
 export const logoutUser = async () => {
     try {
-        // Opțional: Trimite cererea de logout la server pentru a valida că utilizatorul este autentificat
-        const response = await fetch('http://localhost:1000/logout', {
+        // Opțional: Trimite cererea de logout la serverul PHP
+        const response = await fetch('http://localhost/logout.php', {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`, // Sau sessionStorage

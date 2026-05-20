@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const User = require('../models/User');
-const nodemailer = require('nodemailer');
+const { createTransporter } = require('../email/email');
 
 const recovery = async (req, res) => {
     try {
@@ -27,32 +27,23 @@ const recovery = async (req, res) => {
         // Construiește URL de reset
         const resetUrl = `http://localhost:3000/auth/reset-password?token=${token}`;
 
-        // Configurare nodemailer
-        const transporter = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 2525,
-            auth: {
-                user: "0e2014512b007e",
-                pass: "270ee30283271a"
-            }
-        });
+        const transporter = createTransporter();
 
         // Email-ul de trimitere
         const mailOptions = {
-            from: 'noreply@medica.ro',
+            from: process.env.EMAIL_FROM || 'noreply@medica.ro',
             to: email,
             subject: 'Resetare parolă',
             text: `Salut,\n\nAccesează acest link pentru a-ți reseta parola:\n${resetUrl}\n\nLinkul expiră în 1 oră.`,
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error("Eroare la trimiterea emailului:", error);
-                return res.status(500).json({ message: "Eroare la trimiterea emailului." });
-            }
-
+        try {
+            await transporter.sendMail(mailOptions);
             return res.status(200).json({ message: 'Email cu link de resetare trimis.' });
-        });
+        } catch (error) {
+            console.error("Eroare la trimiterea emailului:", error);
+            return res.status(500).json({ message: "Eroare la trimiterea emailului." });
+        }
 
     } catch (error) {
         console.error("Eroare în funcția de recovery:", error);

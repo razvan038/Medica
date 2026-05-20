@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 // Crează o instanță Sequelize pentru conectarea la baza de date
-const sequelize = new Sequelize('Medica', 'root', 'root', {
+const sequelize = new Sequelize('medica', 'root', 'Root', {
     host: 'localhost',
     dialect: 'mysql',
 });

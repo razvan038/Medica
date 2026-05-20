@@ -6,25 +6,25 @@ const setupDB = async () => {
         const connection = await mysql.createConnection({
             host: "localhost",
             user: "root",
-            password: "",
+            password: "Root",
             multipleStatements: true,
         });
 
         // Verificăm dacă baza de date există
         const [dbExists] = await connection.query(
-            `SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'Medica'`
+            `SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'medica'`
         );
 
         if (dbExists.length === 0) {
             console.log("Baza de date nu există. Se creează...");
-            await connection.query(`CREATE DATABASE Medica`);
+            await connection.query(`CREATE DATABASE medica`);
             console.log("Baza de date a fost creată!");
         } else {
             console.log("Baza de date deja există.");
         }
 
         // Folosim baza de date
-        await connection.query("USE Medica");
+        await connection.query("USE medica");
 
         // Creăm tabelele
         const createTablesSQL = `

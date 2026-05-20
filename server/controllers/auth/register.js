@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const crypto = require('crypto'); // pentru generarea OTP-ului
-const nodemailer = require('nodemailer'); // pentru trimiterea OTP-ului pe email
+const { createTransporter } = require('../email/email'); // Gmail SMTP transport
 
 // Funcție pentru înregistrarea utilizatorului
 const register = async (req, res) => {
@@ -38,28 +38,22 @@ const register = async (req, res) => {
         await newUser.save();
 
         // Trimite OTP-ul pe email
-        var transporter = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 2525,
-            auth: {
-              user: "0e2014512b007e",
-              pass: "270ee30283271a"
-            }
-          });
+        const transporter = createTransporter();
 
         const mailOptions = {
-            from: 'noreply@medica.ro',
+            from: process.env.EMAIL_FROM || 'noreply@medica.ro',
             to: email,
             subject: 'Verificare OTP',
             text: `Codul tău OTP pentru confirmarea contului este: ${otp}`,
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                return console.log(error);
-            }
+        try {
+            const info = await transporter.sendMail(mailOptions);
             console.log('OTP trimis la emailul utilizatorului:', info.response);
-        });
+        } catch (error) {
+            console.error('Eroare la trimiterea emailului:', error);
+            return res.status(500).json({ message: 'Eroare la trimiterea emailului.' });
+        }
 
         // Răspunde cu succes
         res.status(201).json({ message: 'Utilizator înregistrat cu succes. Te rugăm să verifici email-ul pentru OTP.' });

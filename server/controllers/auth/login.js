@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+const { createTransporter } = require('../email/email');
 const User = require('../models/User');
 
 const loginUser = async (req, res) => {
@@ -27,29 +27,21 @@ const loginUser = async (req, res) => {
             user.otp = otp;
             await user.save();
 
-            const transporter = nodemailer.createTransport({
-                host: "sandbox.smtp.mailtrap.io",
-                port: 2525,
-                auth: {
-                    user: "0e2014512b007e",
-                    pass: "270ee30283271a"
-                }
-            });
+            const transporter = createTransporter();
 
             const mailOptions = {
-                from: 'noreply@medica.ro',
+                from: process.env.EMAIL_FROM || 'noreply@medica.ro',
                 to: email,
                 subject: 'Reverificare OTP',
                 text: `Codul tău OTP pentru confirmarea contului este: ${otp}`,
             };
 
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.error('Eroare trimitere OTP:', error);
-                } else {
-                    console.log('OTP retrimis la email:', info.response);
-                }
-            });
+            try {
+                const info = await transporter.sendMail(mailOptions);
+                console.log('OTP retrimis la email:', info.response);
+            } catch (error) {
+                console.error('Eroare trimitere OTP:', error);
+            }
 
             return res.status(403).json({ message: 'Contul nu este verificat. Am retrimis OTP-ul pe email.' });
         }
